@@ -320,4 +320,4 @@ MIT
 
 ## Support
 
-For issues, questions, or contributions, please visit our [GitHub repository](https://github.com/appnigma/integrations-client-python).
+For issues, questions, or contributions, please visit our [GitHub repository](https://github.com/appnigma/appnigma-integrations-python).

@@ -29,6 +29,6 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/appnigma/integrations-client-python"
-Repository = "https://github.com/appnigma/integrations-client-python"
-Issues = "https://github.com/appnigma/integrations-client-python/issues"
+Homepage = "https://github.com/appnigma/appnigma-integrations-python"
+Repository = "https://github.com/appnigma/appnigma-integrations-python"
+Issues = "https://github.com/appnigma/appnigma-integrations-python/issues"
