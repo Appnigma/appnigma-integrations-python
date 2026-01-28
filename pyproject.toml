@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "appnigma-integrations-client"
+version = "0.1.0"
+description = "Official Python SDK for Appnigma Integrations API"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Appnigma", email = "support@appnigma.ai"}
+]
+keywords = ["appnigma", "salesforce", "integration", "sdk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "aiohttp>=3.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/appnigma/integrations-client-python"
+Repository = "https://github.com/appnigma/integrations-client-python"
+Issues = "https://github.com/appnigma/integrations-client-python/issues"
