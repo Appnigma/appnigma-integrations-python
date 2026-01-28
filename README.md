@@ -23,7 +23,7 @@ async def main():
     # Get connection credentials
     credentials = await client.get_connection_credentials(
         connection_id='connectionId',
-        integration_id='integrationId'  # Optional if API key is integration-scoped
+        integration_id='integrationId'  # Optional - extracted from API key if not provided
     )
 
     # Make a proxied Salesforce API call
@@ -34,7 +34,7 @@ async def main():
             'path': '/services/data/v59.0/query',
             'query': {'q': 'SELECT Id, Name FROM Account LIMIT 10'}
         },
-        integration_id='integrationId'  # Optional
+        integration_id='integrationId'  # Optional - extracted from API key if not provided
     )
 
     # Clean up
@@ -90,7 +90,7 @@ Pass the API key directly in the constructor:
 client = AppnigmaClient(api_key='your-api-key')
 ```
 
-**Note**: API keys are integration-scoped. If your API key is scoped to a specific integration, you don't need to provide the `integration_id` parameter in method calls.
+**Note**: API keys are integration-scoped. The `integration_id` parameter is optional and will be automatically extracted from your API key if not provided.
 
 ## API Reference
 
@@ -117,7 +117,7 @@ Retrieve decrypted access token and metadata for a Salesforce connection.
 
 **Parameters:**
 - `connection_id` (str, required): The connection ID
-- `integration_id` (str, optional): Integration ID. Required if API key is not integration-scoped.
+- `integration_id` (str, optional): Integration ID. Automatically extracted from API key if not provided.
 
 **Returns:** `ConnectionCredentials` (TypedDict)
 
@@ -151,7 +151,7 @@ Make a proxied API call to Salesforce with automatic token refresh and usage tra
   - `path` (required): Salesforce API path (e.g., '/services/data/v59.0/query')
   - `query` (optional): Query parameters as key-value pairs
   - `data` (optional): Request body data (for POST, PUT, PATCH)
-- `integration_id` (str, optional): Integration ID. Required if API key is not integration-scoped.
+- `integration_id` (str, optional): Integration ID. Automatically extracted from API key if not provided.
 
 **Returns:** Raw Salesforce API response (dict, list, or other JSON-serializable type)
 
