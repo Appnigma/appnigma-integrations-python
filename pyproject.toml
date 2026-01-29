@@ -2,9 +2,13 @@
 requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+# Avoid License-File in metadata (rejected by some PyPI/twine validation)
+license-files = []
+
 [project]
 name = "appnigma-integrations-client"
-version = "0.1.0"
+version = "0.1.1"
 description = "Official Python SDK for Appnigma Integrations API"
 readme = "README.md"
 license = {text = "MIT"}
