@@ -28,6 +28,26 @@ class ConnectionCredentials(TypedDict):
     expiresAt: str
 
 
+class ConnectionSummary(TypedDict):
+    """Summary of a connection (list response item)."""
+    connectionId: str
+    userEmail: str
+    userName: str
+    orgName: str
+    environment: str
+    region: str
+    status: str
+    connectedAt: str
+    lastActiveAt: str
+
+
+class ListConnectionsResponse(TypedDict):
+    """Response from list connections API."""
+    connections: list
+    totalCount: int
+    nextCursor: NotRequired[Optional[str]]
+
+
 class SalesforceProxyRequest(TypedDict):
     """Request data for proxying Salesforce API calls."""
     method: Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE']

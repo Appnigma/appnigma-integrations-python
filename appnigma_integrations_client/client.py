@@ -8,7 +8,7 @@ import aiohttp
 from aiohttp import ClientError, ClientTimeout
 
 from .errors import AppnigmaAPIError
-from .types import ConnectionCredentials, SalesforceProxyRequest
+from .types import ConnectionCredentials, SalesforceProxyRequest, ListConnectionsResponse
 
 SDK_VERSION = '0.1.2'
 DEFAULT_BASE_URL = 'https://integrations.appnigma.ai'
@@ -80,6 +80,87 @@ class AppnigmaClient:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit."""
         await self.close()
+
+    async def list_connections(
+        self,
+        integration_id: Optional[str] = None,
+        environment: Optional[str] = None,
+        status: Optional[str] = None,
+        search: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None
+    ) -> ListConnectionsResponse:
+        """
+        List connections for the integration (integration from API key or integration_id).
+
+        Args:
+            integration_id: Optional integration ID. Required if API key is not
+                            integration-scoped.
+            environment: Optional filter (e.g. production, sandbox).
+            status: Optional filter (e.g. connected).
+            search: Optional search on user email.
+            limit: Optional page size (default 20).
+            cursor: Optional pagination cursor from previous response.
+
+        Returns:
+            ListConnectionsResponse with connections, totalCount, and optional nextCursor.
+
+        Raises:
+            AppnigmaAPIError: If the API request fails
+        """
+        headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'User-Agent': f'Appnigma-Integrations-Client-Python/{SDK_VERSION}'
+        }
+
+        if integration_id:
+            headers['X-Integration-Id'] = integration_id
+
+        params: Dict[str, str] = {}
+        if environment is not None:
+            params['environment'] = environment
+        if status is not None:
+            params['status'] = status
+        if search is not None:
+            params['search'] = search
+        if limit is not None:
+            params['limit'] = str(limit)
+        if cursor is not None:
+            params['cursor'] = cursor
+
+        url = f'{self.base_url}/api/v1/connections'
+        if params:
+            from urllib.parse import urlencode
+            url = f'{url}?{urlencode(params)}'
+
+        if self.debug:
+            self._log_request('GET', url, headers, None)
+
+        try:
+            session = await self._get_session()
+            async with session.get(url, headers=headers) as response:
+                status = response.status
+                data = await response.json()
+
+                if self.debug:
+                    self._log_response('GET', url, status, data)
+
+                if status >= 200 and status < 300:
+                    return data
+                else:
+                    raise self._create_error(status, data, 'GET', url)
+
+        except ClientError as e:
+            raise self._handle_network_error(e, 'GET', url)
+        except Exception as e:
+            if isinstance(e, AppnigmaAPIError):
+                raise
+            raise AppnigmaAPIError(
+                0,
+                'UnknownError',
+                f'Unexpected error: {str(e)}',
+                None
+            )
 
     async def get_connection_credentials(
         self,
