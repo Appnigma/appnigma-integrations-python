@@ -4,7 +4,7 @@ from .client import AppnigmaClient
 from .errors import AppnigmaAPIError
 from .types import ConnectionCredentials, ConnectionSummary, ListConnectionsResponse, SalesforceProxyRequest
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __all__ = [
     'AppnigmaClient',
     'AppnigmaAPIError',

@@ -10,7 +10,7 @@ from aiohttp import ClientError, ClientTimeout
 from .errors import AppnigmaAPIError
 from .types import ConnectionCredentials, SalesforceProxyRequest, ListConnectionsResponse
 
-SDK_VERSION = '0.1.2'
+SDK_VERSION = '0.1.3'
 DEFAULT_BASE_URL = 'https://integrations.appnigma.ai'
 DEFAULT_TIMEOUT = 30.0  # 30 seconds
 
