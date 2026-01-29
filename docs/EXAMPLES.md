@@ -57,6 +57,28 @@ async def get_credentials(connection_id: str):
         return credentials
 ```
 
+### List Connections
+
+```python
+async def list_connections():
+    async with AppnigmaClient() as client:
+        result = await client.list_connections()
+        print(f'Total connections: {result["totalCount"]}')
+        for conn in result['connections']:
+            print(f"{conn['connectionId']}: {conn['userEmail']} - {conn['status']}")
+        return result
+
+# With filters and pagination
+async def list_connected_users():
+    async with AppnigmaClient() as client:
+        result = await client.list_connections(
+            status='connected',
+            environment='production',
+            limit=50
+        )
+        return result['connections']
+```
+
 ## Salesforce API Operations
 
 ### SOQL Queries

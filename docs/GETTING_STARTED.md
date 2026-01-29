@@ -105,6 +105,19 @@ client = AppnigmaClient(api_key='your-api-key-here')
 
 ## Basic Usage
 
+### Listing Connections
+
+List connections for the integration (integration is derived from your API key):
+
+```python
+result = await client.list_connections()
+print(f'Found {result["totalCount"]} connections')
+for conn in result['connections']:
+    print(conn['connectionId'], conn['userEmail'], conn['status'])
+```
+
+Optional parameters: `environment`, `status`, `search`, `limit`, `cursor` (pagination).
+
 ### Getting Connection Credentials
 
 Retrieve access tokens and metadata for a Salesforce connection:

@@ -140,6 +140,23 @@ print(credentials['instanceUrl'])
 }
 ```
 
+##### `list_connections(integration_id=None, environment=None, status=None, search=None, limit=None, cursor=None)`
+
+List connections for the integration (integration from API key).
+
+**Parameters:**
+- `integration_id` (optional): Integration ID. Extracted from API key if not provided.
+- `environment`, `status`, `search`, `limit`, `cursor` (optional): Filters and pagination.
+
+**Returns:** `ListConnectionsResponse` with `connections`, `totalCount`, `nextCursor` (optional)
+
+**Example:**
+```python
+result = await client.list_connections(limit=10)
+for conn in result['connections']:
+    print(conn['connectionId'], conn['userEmail'])
+```
+
 ##### `proxy_salesforce_request(connection_id, request_data, integration_id=None)`
 
 Make a proxied API call to Salesforce with automatic token refresh and usage tracking.

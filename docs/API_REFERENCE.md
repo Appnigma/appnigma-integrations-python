@@ -90,6 +90,64 @@ print('Expires At:', credentials['expiresAt'])
 - `404`: Not Found - Connection, Integration, or Company not found
 - `500`: Internal Server Error - Server error or token refresh failure
 
+#### `list_connections(integration_id=None, environment=None, status=None, search=None, limit=None, cursor=None)`
+
+Lists connections for the integration. The integration is derived from the API key (integration-scoped); you can optionally pass `integration_id` when using a company-level key.
+
+**Signature:**
+```python
+async def list_connections(
+    self,
+    integration_id: Optional[str] = None,
+    environment: Optional[str] = None,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: Optional[int] = None,
+    cursor: Optional[str] = None
+) -> ListConnectionsResponse
+```
+
+**Parameters:**
+- `integration_id` (str, optional): Integration ID. Automatically extracted from API key if not provided.
+- `environment` (str, optional): Filter by environment (e.g., `'production'`, `'sandbox'`).
+- `status` (str, optional): Filter by status (e.g., `'connected'`).
+- `search` (str, optional): Search by user email (case-insensitive).
+- `limit` (int, optional): Page size (default 20).
+- `cursor` (str, optional): Pagination cursor from a previous response's `nextCursor`.
+
+**Returns:** `ListConnectionsResponse` (TypedDict) with `connections`, `totalCount`, and optional `nextCursor`
+
+**Raises:** `AppnigmaAPIError` if the API request fails
+
+**Example:**
+```python
+# List all connections (integration from API key)
+result = await client.list_connections()
+print(f'Total: {result["totalCount"]}')
+for conn in result['connections']:
+    print(f"{conn['connectionId']}: {conn['userEmail']} ({conn['status']})")
+
+# With filters and pagination
+page1 = await client.list_connections(limit=10, status='connected')
+if 'nextCursor' in page1:
+    page2 = await client.list_connections(limit=10, cursor=page1['nextCursor'])
+```
+
+**Response Structure:**
+```python
+{
+    'connections': [ConnectionSummary, ...],  # List of connection summaries
+    'totalCount': int,                          # Number of items in this page
+    'nextCursor': str | None                    # Present if more pages exist
+}
+```
+
+**Error Codes:**
+- `401`: Unauthorized - Invalid or revoked API key
+- `403`: Forbidden - API key doesn't match integration
+- `404`: Not Found - Integration or Company not found
+- `500`: Internal Server Error - Server error
+
 #### `proxy_salesforce_request(connection_id, request_data, integration_id=None)`
 
 Makes a proxied API call to Salesforce with automatic token refresh and usage tracking.
@@ -195,6 +253,34 @@ class ConnectionCredentials(TypedDict):
     region: str            # Geographic region code
     tokenType: str         # Usually "Bearer"
     expiresAt: str          # ISO 8601 expiration timestamp
+```
+
+### ConnectionSummary
+
+Summary of a connection (item in list connections response).
+
+```python
+class ConnectionSummary(TypedDict):
+    connectionId: str
+    userEmail: str
+    userName: str
+    orgName: str
+    environment: str
+    region: str
+    status: str
+    connectedAt: str
+    lastActiveAt: str
+```
+
+### ListConnectionsResponse
+
+Response from the list connections API.
+
+```python
+class ListConnectionsResponse(TypedDict):
+    connections: list       # List of ConnectionSummary
+    totalCount: int
+    nextCursor: NotRequired[Optional[str]]  # Present when more pages exist
 ```
 
 ### SalesforceProxyRequest
