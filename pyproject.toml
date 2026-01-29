@@ -8,7 +8,7 @@ license-files = []
 
 [project]
 name = "appnigma-integrations-client"
-version = "0.1.1"
+version = "0.1.2"
 description = "Official Python SDK for Appnigma Integrations API"
 readme = "README.md"
 license = {text = "MIT"}
